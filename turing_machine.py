@@ -3,29 +3,17 @@ LEFT = -1
 STAY = 0
 
 def validar_adn(secuencia):
-    estado = 'q0'
-    cinta = list(secuencia) + ['□']
-    cabezal = 0
+    
+    if not secuencia.startswith("ATG"):
+        return False
+    
+    if "TATA" not in secuencia:
+        return False
 
-    transiciones_validacion = {
-        ('q0', 'A'): ('q0', 'A', RIGHT),
-        ('q0', 'T'): ('q0', 'T', RIGHT),
-        ('q0', 'C'): ('q0', 'C', RIGHT),
-        ('q0', 'G'): ('q0', 'G', RIGHT),
-        ('q0', '□'): ('q_accept', '□', STAY),
-    }
+    if not (secuencia.endswith("TAG") or secuencia.endswith("TAA") or secuencia.endswith("TGA")):
+        return False
 
-    while estado != 'q_accept' and estado != 'q_reject':
-        simbolo_actual = cinta[cabezal]
-        if (estado, simbolo_actual) in transiciones_validacion:
-            nuevo_estado, simbolo_escrito, direccion = transiciones_validacion[(estado, simbolo_actual)]
-            cinta[cabezal] = simbolo_escrito
-            estado = nuevo_estado
-            cabezal += direccion
-        else:
-            estado = 'q_reject'
-
-    return estado == 'q_accept'
+    return True
 
 def encontrar_patron(secuencia, patron):
     if not validar_adn(secuencia):
@@ -38,3 +26,4 @@ def encontrar_patron(secuencia, patron):
     else:
         print(f"Patrón '{patron}' no encontrado en la secuencia.")
         return False
+
